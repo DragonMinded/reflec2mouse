@@ -1,33 +1,3 @@
-========================================================================
-    CONSOLE APPLICATION : ReflecDriver Project Overview
-========================================================================
+A utility for controlling the mouse on Windows XP from a ReflecBeat cabinet's serial touch interface.
 
-AppWizard has created this ReflecDriver application for you.
-
-This file contains a summary of what you will find in each of the files that
-make up your ReflecDriver application.
-
-
-ReflecDriver.vcproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-ReflecDriver.cpp
-    This is the main application source file.
-
-/////////////////////////////////////////////////////////////////////////////
-Other standard files:
-
-StdAfx.h, StdAfx.cpp
-    These files are used to build a precompiled header (PCH) file
-    named ReflecDriver.pch and a precompiled types file named StdAfx.obj.
-
-/////////////////////////////////////////////////////////////////////////////
-Other notes:
-
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
-
-/////////////////////////////////////////////////////////////////////////////
+The only command line argument is the com port. On an actual cabinet, the com port is "COM1".
