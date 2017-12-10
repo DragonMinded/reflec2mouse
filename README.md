@@ -15,7 +15,6 @@ From experimentation the screen has an effective resolution of 48 horizontal and
 A complete packet is always 21 bytes long and has the following format:
 
 `SSSSSSYYYYYYYYYYYYYYYYYYPPPPXXXXXXXXXXXXCC`
-`55544C000000300000000000003000000003000002`
 
  - `SSSSSS` - Start of Message. Always contains the characters `UTL` or `55544C` in hex.
  - `YYYYYYYYYYYYYYYYYY` - Bits representing the vertical section. The game enumerates vertical sensors from bottom to top, so the 0th bit is for the very bottom and the 75th bit is for the very top.
