@@ -13,6 +13,12 @@
 // Define to 1 to print debug info, 0 to turn it off
 #define VERBOSE 0
 
+// Define to 1 to print raw serial data, 0 to turn it off
+#define RAW 0
+
+// Define to 1 to bridge to mouse movements and presses, 0 to turn it off
+#define MOUSE 1
+
 void GetDesktopResolution(int& horizontal, int& vertical)
 {
    RECT desktop;
@@ -79,6 +85,13 @@ HANDLE OpenSerial( const _TCHAR *arg, int baud )
 
     SetCommTimeouts(hSerial, &timeouts);
     return hSerial;
+}
+
+void PrintPacket(unsigned char * packet) {
+	for (unsigned int i = 0; i < 21; i++) {
+		printf("%02X", packet[i]);
+	}
+	printf("\n");
 }
 
 bool ValidatePacket(unsigned char * packet) {
@@ -167,24 +180,30 @@ void GetLikelyClickPosition(bool *horizontal, bool *vertical, double *x, double 
 }
 
 void MouseMove(int x, int y) {
-	SetCursorPos(x, y);
+	if (MOUSE) {
+		SetCursorPos(x, y);
+	}
 }
 
 void MouseDown() {
-	INPUT Input = {0};
-    Input.type = INPUT_MOUSE;
-	Input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
-	if (SendInput(1, &Input, sizeof(INPUT)) != 1) {
-		fprintf( stderr, "Failed to send mouse down, error %ld!", GetLastError());
+	if (MOUSE) {
+		INPUT Input = {0};
+		Input.type = INPUT_MOUSE;
+		Input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
+		if (SendInput(1, &Input, sizeof(INPUT)) != 1) {
+			fprintf( stderr, "Failed to send mouse down, error %ld!", GetLastError());
+		}
 	}
 }
 
 void MouseUp() {
-	INPUT Input = {0};
-    Input.type = INPUT_MOUSE;
-	Input.mi.dwFlags = MOUSEEVENTF_LEFTUP | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
-	if (SendInput(1, &Input, sizeof(INPUT)) != 1) {
-		fprintf( stderr, "Failed to send mouse up, error %ld!", GetLastError());
+	if (MOUSE) {
+		INPUT Input = {0};
+		Input.type = INPUT_MOUSE;
+		Input.mi.dwFlags = MOUSEEVENTF_LEFTUP | MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_VIRTUALDESK;
+		if (SendInput(1, &Input, sizeof(INPUT)) != 1) {
+			fprintf( stderr, "Failed to send mouse up, error %ld!", GetLastError());
+		}
 	}
 }
 
@@ -220,6 +239,10 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		// See if the packet is good
 		if (ValidatePacket(packet)) {
+			if (RAW) {
+				PrintPacket(packet);
+			}
+
 			// Get the touched axis
 			SeparateAxis(packet, horizontal, vertical);
 
